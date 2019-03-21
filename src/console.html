@@ -47,7 +47,11 @@
           if (stderr) {
             term.echo(`[[;red;]${stderr}]`)
           } else {
-            var stdout = pyodide.runPython("sys.stdout.getvalue()")
+            var stdout = pyodide.runPython(`
+              __output__ = sys.stdout.getvalue()
+              sys.stdout = io.StringIO()
+              __output__
+            `)
             if (stdout) {
               term.echo(stdout.trim())
             }
